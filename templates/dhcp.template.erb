@@ -1,0 +1,56 @@
+# ******************************************************************
+# WARNING: This Cobbler template is managed by the <%= @module_name %>
+# Puppet module.  Manual changes will be overwritten.
+# 
+# Cobbler created this file on ($date)
+# ******************************************************************
+
+ddns-update-style interim;
+
+allow booting;
+allow bootp;
+
+ignore client-updates;
+set vendorclass = option vendor-class-identifier;
+
+option pxe-system-type code 93 = unsigned integer 16;
+
+<% dhcp_interfaces = @interfaces.split(",") -%>
+<% dhcp_interfaces.each do |i| -%>
+<% if i == "lo" -%>
+<% next -%>
+<% else -%>
+<% @subnet = eval("network_" + i) -%>
+<% @netmask = eval("netmask_" + i) -%>
+<% @three_octets = @subnet.split(".").first 3 -%>
+<% @three_octets = @three_octets.join(".") -%>
+<% @router = @three_octets + ".1" -%>
+<% @domain_name_servers = @three_octets + ".1" -%>
+subnet <%= @subnet %> netmask <%= @netmask %> {
+     option routers             <%= @router %>;
+     option domain-name-servers <%= @domain_name_servers %>;
+     option subnet-mask         <%= @netmask %>;
+     range dynamic-bootp        <%= @three_octets %>.100 <%= @three_octets %>.150;
+     default-lease-time         21600;
+     max-lease-time             43200;
+     next-server                $next_server;
+     class "pxeclients" {
+          match if substring (option vendor-class-identifier, 0, 9) = "PXEClient";
+          if option pxe-system-type = 00:02 {
+                  filename "ia64/elilo.efi";
+          } else if option pxe-system-type = 00:06 {
+                  filename "grub/grub-x86.efi";
+          } else if option pxe-system-type = 00:07 {
+                  filename "grub/grub-x86_64.efi";
+          } else {
+                  filename "pxelinux.0";
+          }
+     }
+
+}
+<% end -%>
+<% end -%>
+
+# group for Cobbler DHCP tag: default
+group {
+}

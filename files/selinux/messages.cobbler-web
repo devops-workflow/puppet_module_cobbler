@@ -1,0 +1,5 @@
+type=AVC msg=audit(1.1.1): avc:  denied  { name_connect } for  pid=3323 comm="httpd" dest=25151 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:cobbler_port_t:s0 tclass=tcp_socket
+type=AVC msg=audit(1.1.1): avc:  denied  { write } for  pid=1231 comm="httpd" name="webui_sessions" dev="dm-1" ino=1062908 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:cobbler_var_lib_t:s0 tclass=dir
+type=AVC msg=audit(1.1.1): avc:  denied  { add_name } for  pid=1229 comm="httpd" name="sessionidfj22q3drpbqxw1mveqstdlp8t3t5h67z" scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:cobbler_var_lib_t:s0 tclass=dir
+type=AVC msg=audit(1.1.1): avc:  denied  { create } for  pid=1229 comm="httpd" name="sessionid8lhfe8zid6pnkr0xeio9z6ue8mun8ifl" scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:cobbler_var_lib_t:s0 tclass=file
+type=AVC msg=audit(1.1.1): avc:  denied  { write } for  pid=1229 comm="httpd" path="/var/lib/cobbler/webui_sessions/sessionid1vvfvos6wgjcwr7n28ywnnrn28t91nt8" dev="dm-1" ino=1896 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:cobbler_var_lib_t:s0 tclass=file
