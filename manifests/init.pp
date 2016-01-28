@@ -15,6 +15,11 @@
 #   Type: Boolean
 #   Default: true
 #
+# [*default_password_crypted*]
+#   The default password to use on build machines.
+#   Type: String
+#   Default: '$1$mF86/UHC$WvcIcX2t6crBz2onWxyac.'
+#
 # [*manage_dhcp*]
 #   If true, Cobbler acts as a DHCP server.
 #   Type: Boolean
@@ -81,15 +86,16 @@
 #
 class cobbler (
 
-  $allow_dynamic_settings = true,
-  $manage_dhcp            = false,
-  $manage_dns             = false,
-  $manage_forward_zones   = ['example.com', '2.example.com'],
-  $manage_reverse_zones   = ['10.0.0', '192.168.0'],
-  $next_server            = $::ipaddress,
-  $package_version        = 'installed',
-  $serializer_pretty_json = true,
-  $server                 = $::ipaddress,
+  $allow_dynamic_settings   = true,
+  $default_password_crypted = '$1$mF86/UHC$WvcIcX2t6crBz2onWxyac.',
+  $manage_dhcp              = false,
+  $manage_dns               = false,
+  $manage_forward_zones     = ['example.com', '2.example.com'],
+  $manage_reverse_zones     = ['10.0.0', '192.168.0'],
+  $next_server              = $::ipaddress,
+  $package_version          = 'installed',
+  $serializer_pretty_json   = true,
+  $server                   = $::ipaddress,
 
 ) {
 
@@ -102,11 +108,14 @@ class cobbler (
       $dns_package = 'bind-chroot'
       $dns_service = 'named'
       $service = 'cobblerd'
-      class { '::epel':
-        before => [ Package['cobbler-web'], Class['::selinux'] ]
-      } 
+
+      Class['::epel'] -> Package['cobbler-web'] -> Class['::selinux']
+      include '::epel'
+
       package { 'syslinux-tftpboot': }
+
       package { 'pykickstart': }
+
     }
     'Debian': {
       $apache_service = 'apache2'
@@ -119,8 +128,8 @@ class cobbler (
     }
   }
 
-  class { '::firewall': }
-  class { '::selinux': }
+  include '::firewall':
+  include '::selinux':
 
   selinux::audit2allow { 'cobbler-web':
     source => "puppet:///modules/${module_name}/selinux/messages.cobbler-web",
@@ -189,6 +198,8 @@ class cobbler (
     value   => $manage_dhcp,
     require => Cobbler::Setting['allow_dynamic_settings'],
   }
+
+  cobbler::setting { 'default_password_crypted': value => $default_password_crypted }
 
   cobbler::setting { 'manage_forward_zones': value => $manage_forward_zones }
 
