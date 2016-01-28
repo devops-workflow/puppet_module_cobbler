@@ -128,8 +128,8 @@ class cobbler (
     }
   }
 
-  include '::firewall':
-  include '::selinux':
+  include '::firewall'
+  include '::selinux'
 
   selinux::audit2allow { 'cobbler-web':
     source => "puppet:///modules/${module_name}/selinux/messages.cobbler-web",
