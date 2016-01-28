@@ -5,6 +5,7 @@ $comment        = "${title} repo",
 $keep_updated   = 'Y',
 $mirror_locally = 'Y',
 $mirror,
+$priority       = '99',
 $proxy          = '',
 ) {
 
@@ -19,6 +20,7 @@ $proxy          = '',
       --mirror \"${mirror}\"\
       --mirror-locally \"${mirror_locally}\"\
       --proxy \"${proxy}\"\
+      --priority \"${priority}\"\
      ",
 #    unless   => "${cobbler::binary} repo report --name ${title}",
     require  => Service[$cobbler::service],
