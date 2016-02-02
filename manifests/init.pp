@@ -86,16 +86,19 @@
 #
 class cobbler (
 
-  $allow_dynamic_settings   = true,
-  $default_password_crypted = '$1$mF86/UHC$WvcIcX2t6crBz2onWxyac.',
-  $manage_dhcp              = false,
-  $manage_dns               = false,
-  $manage_forward_zones     = ['example.com', '2.example.com'],
-  $manage_reverse_zones     = ['10.0.0', '192.168.0'],
-  $next_server              = $::ipaddress,
-  $package_version          = 'installed',
-  $serializer_pretty_json   = true,
-  $server                   = $::ipaddress,
+  $allow_dynamic_settings                = true,
+  $default_password_crypted              = '$1$mF86/UHC$WvcIcX2t6crBz2onWxyac.',
+  $manage_dhcp                           = false,
+  $manage_dns                            = false,
+  $manage_forward_zones                  = ['example.com', '2.example.com'],
+  $manage_reverse_zones                  = ['10.0.0', '192.168.0'],
+  $next_server                           = $::ipaddress,
+  $package_version                       = 'installed',
+  $puppet_auto_setup                     = false,
+  $remove_old_puppet_certs_automatically = false,
+  $serializer_pretty_json                = true,
+  $server                                = $::ipaddress,
+  $sign_puppet_certs_automatically       = false,
 
 ) {
 
@@ -205,10 +208,16 @@ class cobbler (
 
   cobbler::setting { 'manage_reverse_zones': value => $manage_reverse_zones }
 
+  cobbler::setting { 'puppet_auto_setup': value => $puppet_auto_setup }
+
   cobbler::setting { 'next_server': value => $next_server }
+
+  cobbler::setting { 'remove_old_puppet_certs_automatically': value => $remove_old_puppet_certs_automatically }
 
   cobbler::setting { 'serializer_pretty_json': value => $serializer_pretty_json }
 
   cobbler::setting { 'server': value => $server }
+
+  cobbler::setting { 'sign_puppet_certs_automatically': value => $sign_puppet_certs_automatically }
 
 }
