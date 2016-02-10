@@ -1,4 +1,5 @@
 class cobbler::dns {
+  include ::selinux
 
   if ( $::osfamily == 'RedHat' ) {
     cobbler::setting { 'bind_chroot':
@@ -18,6 +19,10 @@ class cobbler::dns {
     ensure  => running,
     enable  => true,
     require => [ File['/etc/cobbler/named.template'] ],
+  }
+
+  selinux::audit2allow { 'named':
+    source => "puppet:///modules/${module_name}/selinux/messages.named",
   }
 
   firewall { '100 Accept inbound connections to Cobbler TCP DNS Port':

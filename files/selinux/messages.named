@@ -1,0 +1,1 @@
+type=AVC msg=audit(1455147174.688:177625): avc:  denied  { append } for  pid=3904 comm="named" path="/var/named/data/named.run" dev="dm-0" ino=3899309 scontext=system_u:system_r:named_t:s0 tcontext=unconfined_u:object_r:var_t:s0 tclass=file
