@@ -111,6 +111,7 @@ class cobbler (
       $dns_package = 'bind-chroot'
       $dns_service = 'named'
       $service = 'cobblerd'
+      $web_root = '/var/www/cobbler'
 
       Class['::epel'] -> Package['cobbler-web'] -> Class['::selinux']
       include '::epel'
@@ -128,6 +129,7 @@ class cobbler (
       $dns_package = 'bind9'
       $dns_service = $dns_package
       $service = 'cobbler'
+      $web_root = '/var/www/cobbler'
     }
   }
 
